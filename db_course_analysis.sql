@@ -62,21 +62,21 @@ GROUP BY e.student_id
 HAVING first_date_purchased IS NULL
     OR first_date_watched <= first_date_purchased;
 
-/*
-Calculate the free-to-paid Conversion Rate
-Calculate the Average Duration between Registration and First-Time Engagement
-Calculate the Average  between First-Time Engagement and First-Time purchase
-Create subquery
-*/
-
+-- Calculate metrics to analyze student engagement and purchasing behavior
  SELECT 
+-- Calculate the conversion rate: percentage of students who watched content and made a purchase     
     ROUND(COUNT(first_date_purchased) / COUNT(first_date_watched),
             2) * 100 AS conversion_rate,
+
+ -- Calculate the average number of days between a student's registration and their first content watch    
     ROUND(SUM(days_diff_reg_watch) / COUNT(days_diff_reg_watch),
             2) AS av_reg_watch,
+
+  -- Calculate the average number of days between a student's first content watch and their first purchase   
     ROUND(SUM(days_diff_watch_purch) / COUNT(days_diff_watch_purch),
             2) AS av_watch_purch
 FROM
+ -- Select columns to retrieve information on students' engagement    
     (SELECT 
         e.student_id,
             i.date_registered,
@@ -90,5 +90,5 @@ FROM
     LEFT JOIN student_purchases p ON e.student_id = p.student_id
     GROUP BY e.student_id
     HAVING first_date_purchased IS NULL
-        OR first_date_watched <= first_date_purchased) a;
+        OR first_date_watched <= first_date_purchased) a; -- Alias the subquery as 'a' for use in the main query
  
