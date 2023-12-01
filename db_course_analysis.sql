@@ -3,18 +3,18 @@ SELECT * FROM db_course_conversions.student_engagement;
 SELECT * FROM db_course_conversions.student_info;
 SELECT * FROM db_course_conversions.student_purchases;
 
-/*
-Retrieve the columns one by one use the MIN aggregate function to find the first-time 
-engagement and purchase dates
-*/
-
+-- Select columns to retrieve information on students info
 SELECT 
     i.student_id,
     i.date_registered,
     MIN(e.date_watched) AS first_date_watched,
     MIN(P.date_purchased) AS first_date_purchased,
+    
+ -- Calculate the difference in days between registration date and the first watch date   
     DATEDIFF(MIN(e.date_watched),
             MIN(i.date_registered)) AS days_diff_reg_watch,
+    
+    -- Calculate the difference in days between the first watch date and the first purchase date  
     DATEDIFF(MIN(p.date_purchased),
             MIN(e.date_watched)) AS days_diff_watch_purch
 FROM
@@ -66,7 +66,7 @@ HAVING first_date_purchased IS NULL
 Calculate the free-to-paid Conversion Rate
 Calculate the Average Duration between Registration and First-Time Engagement
 Calculate the Average  between First-Time Engagement and First-Time purchase
-Create subquery and suDurationrround with parenthesis
+Create subquery
 */
 
  SELECT 
